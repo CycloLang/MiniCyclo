@@ -1,6 +1,6 @@
 # MiniCyclo Docs
 
-MiniCyclo is a subset of Cyclo. With the sole exception of the `$print()` function, all MiniCyclo code is valid Cyclo code. MiniCyclo removes almost all the syntaxtic sugar from Cyclo.
+MiniCyclo is a subset of Cyclo. With the sole exception of the `$print()` function, all MiniCyclo code is valid Cyclo code. MiniCyclo removes almost all the syntaxtic sugar from Cyclo. A full grammar of Cyclo is avaible at `miniCyclo.bnf`
 
 The full list of restrictions is as follows:
 
