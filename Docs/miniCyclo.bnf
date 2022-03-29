@@ -1,0 +1,88 @@
+program: (expr ";")+ <EOF>;
+
+expr: controlBlock
+    | block
+    | preProccessorDec
+    | assignment; #or below
+
+controlBlock: ifBlock
+            | whileBlock;
+
+ifBlock: "if" "(" expr ")" expr ("else" expr)? ;
+
+whileBlock: "while" "(" expr ")" expr;
+
+block: "{" (expr ";")* "}";
+
+preProccessorDec: import
+                | macroDec
+                | operatorDec;
+
+import: "import" identifier;
+
+macroDec: "macro" (identifier | symbolic) "->" expr;
+
+operatorDec: ("infix"| "prefix" | "call" | "surround" ) (identifier | symbolic) "(" expr ")" "->" expr;
+
+#operating
+assignment: (call ".")? identifier assignmentOp assignment
+          | or;
+
+or: (or orOp)? xor;
+
+xor: (xor xorOp)? and;
+
+and: (and andOp)? equality;
+
+equality: (equality equalityOp)? comparison;
+
+comparison: (comparison comparisonOp)? term
+          | lambda;
+
+term: (term termOp)? factor;
+
+factor: (factor factorOp)? unary;
+
+unary: unaryOp unary
+     | call;
+
+call: primary (calling | "." identifier)* ;
+
+primary: primaryCall
+       | "True" | "False" | "Null" | "me"
+       | num | string | identifier
+       | "super" "." identifier
+       | symbolic; #undefined operators
+
+#helpers
+
+identifier: "$"? alpha (alpha|num)* ;
+alpha: a...z|A...Z|_;
+num: 0-9;
+symbolic: symbol+;
+symbol: <any other non whitespace char>;
+
+arguments: expr ("," expr)*;
+
+lambda: "(" parameters? ")" "=>" block;
+parameters: identifier ("," identifier)*;
+
+string: "\"" (<any char except "\"" and \ > | \ <any char>)* "\""
+      | "'" <any char except "\"" and \ > | \ <any char> "'";
+
+#predefined operators
+
+assignmentOp: "=" | ":=" | "::=" | <operator of precdence 10>;
+orOp: <operator of precdence 9>;
+xorOp: <operator of precdence 8>;
+andOp: <operator of precdence 7>;
+equalityOp: <operator of precdence 6>;
+comparisonOp: <operator of precdence 5>;
+termOp: <operator of precdence 4>;
+factorOp: <operator of precdence 3>;
+unaryOp: <operator of precdence 2>;
+
+calling: "(" arguments? ")"
+        | <open bracket of precdence 1> arguments? <close bracket of precdence 1>;
+primaryCall: "(" arguments? ")"
+        | <open bracket of precdence 0> arguments? <close bracket of precdence 0>;
