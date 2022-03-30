@@ -2,21 +2,20 @@ program: (expr ";")+ <EOF>;
 
 expr: controlBlock
     | block
-    | preProccessorDec
+    | import
     | assignment; #or below
 
 controlBlock: ifBlock
-            | whileBlock;
+            | whileBlock
+            | staticBlock;
 
 ifBlock: "if" "(" expr ")" expr ("else" expr)? ;
 
 whileBlock: "while" "(" expr ")" expr;
 
-block: "{" (expr ";")* "}";
+staticBlock: "static" expr;
 
-preProccessorDec: import
-                | macroDec
-                | operatorDec;
+block: "{" (expr ";")* "}";
 
 import: "import" identifier;
 
@@ -25,7 +24,10 @@ macroDec: "macro" (identifier | symbolic) "->" expr;
 operatorDec: ("infix"| "prefix" | "call" | "surround" ) (identifier | symbolic) "(" expr ")" "->" expr;
 
 #operating
-assignment: (call ".")? identifier assignmentOp assignment
+assignment: (call "." | specifier)? identifier assignmentOp assignment
+          | lambda
+          | macroDef
+          | opDef
           | or;
 
 or: (or orOp)? xor;
@@ -36,8 +38,7 @@ and: (and andOp)? equality;
 
 equality: (equality equalityOp)? comparison;
 
-comparison: (comparison comparisonOp)? term
-          | lambda;
+comparison: (comparison comparisonOp)? term;
 
 term: (term termOp)? factor;
 
@@ -50,7 +51,7 @@ call: primary (calling | "." identifier)* ;
 
 primary: primaryCall
        | "True" | "False" | "Null" | "me"
-       | num | string | identifier
+       | int | string | identifier
        | "super" "." identifier
        | symbolic; #undefined operators
 
@@ -64,9 +65,14 @@ symbol: <any other non whitespace char>;
 
 arguments: expr ("," expr)*;
 
-lambda: "(" parameters? ")" "=>" block;
+specifier: "macro" | ("infix" | "prefix" | "surround") expr; #expr evaluates to int
+
+lambda: "(" parameters? ")" "=>" expr;
+macroDef: "(" ")" "->" expr | expr;
+opDef: expr;
 parameters: identifier ("," identifier)*;
 
+int: num+;
 string: "\"" (<any char except "\"" and \ > | \ <any char>)* "\""
       | "'" <any char except "\"" and \ > | \ <any char> "'";
 

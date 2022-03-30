@@ -1,0 +1,9 @@
+main := () => {
+    $print("Hello world!")
+}
+
+macro x := d
+
+macro y := (a) -> a
+
+infix 2 × :=

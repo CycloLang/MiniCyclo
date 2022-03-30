@@ -15,6 +15,10 @@ The full list of restrictions is as follows:
 - Function parameters cannot be given default values
 - No formattted strings
 - No slices or ranges
+- No block comments
+- Dicts and Structs
+- Array and Tuple literals
+- Semicolons are required
 
 ## Builtin functions
 
