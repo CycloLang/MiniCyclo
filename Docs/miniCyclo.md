@@ -25,6 +25,7 @@ The full list of restrictions is as follows:
 The following builtin functions are the only ones accessible:
 
 - `$print(<value>)` not a function in standard Cyclo, `print()` is instead defined in the stdlib. The interpreter prints the value of the expression.
+- Operators on values:
 - `$add(a,b)` returns `a+b`
 - `$sub(a,b)` returns `a-b`
 - `$mul(a,b)` returns `a*b`
@@ -46,6 +47,7 @@ The following builtin functions are the only ones accessible:
 - `$bool(a)` returns `bool(a)`
 - `$str(a)` returns `str(a)`
 - `$concat(a,b)` returns `a+b`
+- Other
 - `$in(a,b)` returns `a in b`
 - `$index(a,b)` returns the index of `b` at which `a` first occurs
 - `$delItem(a,b)` deletes `a[b]`

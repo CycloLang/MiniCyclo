@@ -1,7 +1,33 @@
-add := (a,b) => {
-    $add(a,b)
-}
+add := (a,b) => $add(a,b)
 
-$print(add(1,2))
+$print(add(2,2))
 
-a + b |=> =/
+//mcy
+
+$assign(add,
+    $func($list(a,b),
+        $add($val(a),$val(b))
+    ));
+$print(add(2,2))
+
+//ast
+
+($assign add ($func ($list a b) (add ($val a) ($val b))))
+($print (add 2 2))
+
+//interpreter
+
+$assign -> assign()
+    add -> name = "add"
+    $func -> val = Func.__init__()
+    |> globals["add"] = Func.__init__(AstNode)
+
+$print -> _print()
+    add -> globals["add"].call()
+        locals["a"] = 2
+        locals["b"] = 2
+        $add
+        2 -> 2
+        2 -> 2
+        |> 4
+    |> print(4)

@@ -203,3 +203,4 @@ def tokenise(text:str) -> list:
 
     for i in tokens:
        print(f"{i.lex} ->> {i.val} |-> {i.cat}")
+    return(tokens)
